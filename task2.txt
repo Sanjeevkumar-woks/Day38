@@ -1,0 +1,358 @@
+Design database for Zen class programme
+1.	users
+2.	codekata
+3.	attendance
+4.	topics
+5.	tasks
+6.	company_drives
+7.	mentors
+
+// solution
+# Create database
+use zen_class;
+---------------------------------------------------------------------------------------------------------------------------
+# Create collection and insert data – “USERS”
+db.createCollection("users");
+db.users.insertMany([
+    {
+        userid: 1,
+        name: "Steve",
+        email: "Steve@gmail.com", 
+    },
+     {
+        userid: 2,
+        name: "Tommy",
+        email: "Tommy@gmail.com",
+    },
+     {
+        userid: 3,
+        name: "Robert",
+        email: "Robert@gmail.com",
+    },
+
+
+
+  {
+        userid: 4,
+        name: "Johny Depp",
+        email: "Johnydep@gmail.com",
+    },
+     {
+        userid: 5,
+        name: "Tony Stark",
+        email: "Tonystark@gmail.com",
+    } 
+    ])
+---------------------------------------------------------------------------------------------------------------------------
+    # Create collection and insert data – “CODEKATA”
+    db.createCollection("codekata");
+    db.codekata.insertMany([
+    {
+        userid: 1,
+        problems: 50
+    },
+     {
+        userid: 2,
+        problems: 30
+    },
+     {
+        userid: 3,
+        problems: 70
+    },
+     {
+        userid: 4,
+        problems: 80
+    },
+   
+  {
+        userid: 5,
+        problems: 90
+    }
+    ])  
+
+# Create collection and insert data – “TOPICS”
+db.createCollection("topics");
+db.topics.insertMany([
+    {   
+        topicid: 1,
+        topic: "HTML",
+        topic_date: new Date("18-oct-2020")
+    },
+     {
+         topicid: 2,
+        topic: "CSS",
+        topic_date: new Date("28-oct-2020")
+    },
+     {
+         topicid: 3,
+        topic: "JavaScript",
+        topic_date: new Date("05-nov-2020")
+    },
+     {
+         topicid: 4,
+        topic: "ReactJS",
+        topic_date: new Date("15-nov-2020")
+    },
+   
+ 
+
+ {
+        topicid: 5,
+        topic: "NodeJS",
+        topic_date: new Date("25-nov-2020")
+    }
+    ])
+---------------------------------------------------------------------------------------------------------------------------
+# Create collection and insert data – “TASKS”
+    db.createCollection("tasks");
+    db.tasks.insertMany([
+    {
+        taskid: 1,
+        topicid: 1,
+        userid: 1,
+        task: "HTML Task",
+        due_date: new Date("18-oct-2020"),
+        submitted: true
+    },
+    {
+        taskid: 2,
+        topicid: 2,
+        userid: 2,
+        task: "CSS Task",
+        due_date: new Date("28-oct-2020"),
+        submitted: true
+    },
+     {
+        taskid: 3,
+        topicid: 3,
+        userid: 3,
+        task: "Javascript Task",
+        due_date: new Date("05-oct-2020"),
+        submitted: false
+    },
+      {
+        taskid: 4,
+        topicid: 4,
+        userid: 4,
+        task: "React Task",
+        due_date: new Date("15-nov-2020"),
+        submitted: true
+    },
+     {
+        taskid: 5,
+        topicid: 5,
+        userid: 5,
+        task: "NodeJS Task",
+        due_date: new Date("25-nov-2020"),
+        submitted: false
+    }
+    ])
+
+# Create collection and insert data – “ATTENDANCE”
+      db.createCollection("attendance");
+      db.attendance.insertMany([
+    {
+        userid: 1,
+        topicid: 2,
+        attended: true
+    },
+  
+   {
+        userid: 2,
+        topicid: 1,
+        attended: true
+    },
+     {
+        userid: 3,
+        topicid: 5,
+        attended: false
+    },
+    {
+        userid: 4,
+        topicid: 3,
+        attended: true
+    },
+    {
+        userid: 5,
+        topicid: 4,
+        attended: false
+    }
+    ])
+    
+# Create collection and insert data – “MENTORS”
+    db.createCollection("mentors");
+    db.mentors.insertMany([
+    {
+        mentorid: 1,
+        mentorname: "Hari",
+        mentor_email:"Hari@gmail.com",
+        mentee_count: 20
+    },
+      {
+        mentorid: 2,
+        mentorname: "Manoj",
+        mentor_email: "manoj@gmail.com",
+        mentee_count: 18
+    },
+      {
+        mentorid: 3,
+        mentorname: "Sakthi",
+        mentor_email: "sakthi@gmail.com",
+        mentee_count: 30
+    },
+      {
+        mentorid: 4,
+        mentorname: "Gokul",
+        mentor_email:"gokul@gmail.com",
+        mentee_count: 15
+    },
+      {
+        mentorid: 5,
+        mentorname: "Praveen",
+        mentor_email: "praveen@gmail.com",
+        mentee_count: 20
+    }
+    ])
+
+---------------------------------------------------------------------------------------------------------------------------
+ # Create collection and insert data – “COMPANY DRIVES”
+      db.createCollection("companydrives");
+      db.comapnydrives.insertMany([
+    {
+        userid: 1,
+        drive_date: new Date("20-oct-2020"),
+        company: "Apple"
+    },
+   
+  {
+        userid: 1,
+        drive_date: new Date("22-oct-2020"),
+        company: "Amazon"
+    },
+     {
+        userid: 2,
+        drive_date: new Date("25-oct-2020"),
+        company: "TCS"
+    },
+     {
+        userid: 3,
+        drive_date: new Date("30-oct-2020"),
+        company: "Flipkart"
+    },
+     {
+        userid: 4,
+        drive_date: new Date("05-nov-2020"),
+        company: "Zomato"
+    }
+    ])
+---------------------------------------------------------------------------------------------------------------------------
+QUESTIONS AND ANSWERS
+1. Find all the topics and tasks which are thought in the month of October
+// solution
+db.topics.aggregate([
+    {
+        $lookup: {
+               from: "tasks",
+               localField: "topicid",
+               foreignField: "topicid",
+               as: "taskinfo"
+             }
+    },
+    {
+        $match: {$and: [{$or: [{topic_date: {$gt: new Date("30-sep-2020")}},{topic_date: {$lt: new Date("1-nov-2020")}}]},
+          {$or: [{"taskinfo.due_date": {$gt: new Date("30-sep-2020")}},{"taskinfo.due_date": {$lt: new Date("1-nov-2020")}}]}
+        ]}
+    }
+    ])
+---------------------------------------------------------------------------------------------------------------------------
+2. Find all the company drives which appeared between 15 oct-2020 and 31-oct-2020
+// solution
+db.comapnydrives.find({$or: [{drive_date: {$gte: new Date("15-oct-2020")}},
+{drive_date: {$lte: new Date("31-0ct-2020")}}]})
+
+---------------------------------------------------------------------------------------------------------------------------
+3. Find all the company drives and students who are appeared for the placement.
+// solution
+db.comapnydrives.aggregate([
+    {
+        $lookup: {
+              from: "users",
+              localField: "userid",
+              foreignField: "userid",
+              as : "userinfo"
+             }
+    },
+    {
+        $project: {
+            _id: 0,
+            "userinfo.name": 1,
+            company: 1,
+            drive_date: 1,
+            "userinfo.email": 1,
+            "userinfo.userid": 1
+        }
+    }
+    ])
+---------------------------------------------------------------------------------------------------------------------------
+4. Find the number of problems solved by the user in codekata
+// solution
+db.codekata.aggregate([
+    {
+        $lookup: {
+               from: "users",
+               localField: "userid",
+               foreignField: "userid",
+               as: "userinfo"
+             }
+    },
+    {
+        $project:{
+            _id: 0,
+            userid: 1,
+            problems: 1,
+           "userinfo.name": 1
+        }
+    }
+    ])
+
+---------------------------------------------------------------------------------------------------------------------------
+
+5. Find all the mentors with who has the mentee's count more than 15
+// solution
+db.users.aggregate([
+   {$lookup: {
+          from: "mentors",
+          localField: "mentorid",
+          foreignField: "mentorid",
+          as: "mentorInfo"
+        }},
+   {$group:{_id:{mentorid:"$mentorInfo.mentorid",mentorname:"$mentorInfo.mentorname"},mentee_count:{$sum:1}}},
+   {$match:{mentee_count:{$gt:15}}},
+   ])
+---------------------------------------------------------------------------------------------------------------------------
+6. Find the number of users who are absent and task is not submitted  between 15 oct-2020 and 31-oct-2020
+// solution
+db.attendance.aggregate([
+    {$lookup: {
+           from: "topics",
+           localField: "topicid",
+           foreignField: "topicid",
+           as: "topics"
+         }},
+         {
+             $lookup: {
+                    from: "tasks",
+                    localField: "topicid",
+                    foreignField: "topicid",
+                    as: "tasks"
+                  }
+         },
+         {$match: {$and: [{attended: false},{"tasks.submitted": false}]}},
+         {$match: {$and: [{$or:[{"topics.topic_date": {$gte: new Date("15-oct-2020")}},{"topics.topic_date": {$lte: new Date("31-oct-2020")}}]}, 
+         {$or: [{"tasks.due_date": {$gte: new Date("15-oct-2020")}},{"tasks.due_date": {$lte: new Date("31-oct-2020")}}]}
+         ]}},
+         {
+             $count: "No_of_students_absent"
+         }
+    ])
+   _________________________________________________________________________
